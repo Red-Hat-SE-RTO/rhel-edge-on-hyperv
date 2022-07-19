@@ -13,7 +13,7 @@
 
     - name: Delete the VM VHD
       kenmoini.hyperv.vhd:
-        path: "{{ vm_base_path }}\{{ vm_name }}.vhdx"
+        path: "{{ vm_base_path }}\\{{ vm_name }}.vhdx"
         state: absent
       tags:
         - delete_vhd
@@ -56,9 +56,9 @@
         name: "{{ vm_name }}"
         memory: "{{ vm_memory | default('4GB') }}"
         cpu: "{{ vm_cpus | default('1') }}"
-        cdrom: "{{ iso_base_path }}\{{ iso_filename }}"
+        cdrom: "{{ iso_base_path }}\\{{ iso_filename }}"
         diskSize: "{{ vm_disk_size | default('10GB') }}"
-        diskPath: "{{ vm_base_path }}\{{ vm_name }}.vhdx"
+        diskPath: "{{ vm_base_path }}\\{{ vm_name }}.vhdx"
         networkSwitch: "{{ vm_network_switch }}"
         bootDevice: "{{ vm_boot_device | default('VHD') }}"
       tags:
