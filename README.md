@@ -11,12 +11,46 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- vm_name: string
+  description: The name of the VM to be actuated.
+  required: true
+
+- vm_state: string
+  description: The desired state of the VM.
+  required: true
+
+- vm_memory: string
+  description: The amount of memory to be allocated to the VM - suffixed with GB.
+  required: true
+  default: 4GB
+
+- vm_cpus: integer
+  description: The number of CPUs to be allocated to the VM.
+  required: true
+  default: 1
+
+- vm_disk_size: string
+  description: The size of the disk to be allocated to the VM - suffixed with GB.
+  required: true
+  default: 10GB
+
+- vm_network_switch: string
+  description: The name of the network switch to be used for the VM.
+  required: true
+
+- vm_boot_device: string
+  description: The boot device to be used for the VM.  Options: Floppy, CD, IDE, LegacyNetworkAdapter, NetworkAdapter, VHD
+  required: true
+  default: VHD
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This depends on the `kenmoini.hyperv` Ansible Collection.
+
+```
+ansible-galaxy collection install git+https://github.com/kenmoini/ansible-collection-hyperv.git,main
+```
 
 Example Playbook
 ----------------

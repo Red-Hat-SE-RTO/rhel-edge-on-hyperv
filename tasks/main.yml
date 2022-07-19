@@ -1,2 +1,73 @@
 ---
 # tasks file for rhel-edge-on-hyperv
+
+- name: Destroy the VM
+  when: vm_state in ['absent']
+  block:
+    - name: Delete a VM
+      kenmoini.hyperv.vm:
+        name: "{{ vm_name }}"
+        state: absent
+      tags:
+        - delete_vm
+
+    - name: Delete the VM VHD
+      kenmoini.hyperv.vhd:
+        path: "{{ vm_base_path }}\{{ vm_name }}.vhdx"
+        state: absent
+      tags:
+        - delete_vhd
+
+- name: Create the VM
+  when: vm_state in ['present', 'poweredon', 'started']
+  block:
+    - name: Check for ISO path
+      ansible.windows.win_file:
+        path: "{{ iso_base_path }}"
+        state: directory
+      tags:
+        - check_iso_path
+        - filesystem
+
+    - name: Check for VM path
+      ansible.windows.win_file:
+        path: "{{ vm_base_path }}"
+        state: directory
+      tags:
+        - check_vm_path
+        - filesystem
+
+    - name: Get the ISO filename
+      set_fact:
+        iso_filename: "{{ iso_path_loc | basename }}"
+      tags:
+        - copy_iso
+
+    - name: Copy over ISO
+      ansible.windows.win_copy:
+        src: "{{ iso_path_loc }}"
+        dest: "{{ iso_base_path }}"
+      tags:
+        - copy_iso
+
+    - name: Create a VM
+      kenmoini.hyperv.vm:
+        state: present
+        name: "{{ vm_name }}"
+        memory: "{{ vm_memory | default('4GB') }}"
+        cpu: "{{ vm_cpus | default('1') }}"
+        cdrom: "{{ iso_base_path }}\{{ iso_filename }}"
+        diskSize: "{{ vm_disk_size | default('10GB') }}"
+        diskPath: "{{ vm_base_path }}\{{ vm_name }}.vhdx"
+        networkSwitch: "{{ vm_network_switch }}"
+        bootDevice: "{{ vm_boot_device | default('VHD') }}"
+      tags:
+        - create_vm
+
+    - name: Power on the VM
+      kenmoini.hyperv.vm:
+        state: started
+        name: "{{ vm_name }}"
+      register: r_vm
+      tags:
+        - power_on_vm

@@ -1,2 +1,5 @@
 ---
 # defaults file for rhel-edge-on-hyperv
+iso_base_path: C:\ProgramData\Microsoft\Windows\Hyper-V\ISOs
+
+vm_base_path: C:\ProgramData\Microsoft\Windows\Hyper-V\VMs

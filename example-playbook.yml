@@ -1,0 +1,26 @@
+---
+- name: Create a VM on HyperV
+  hosts: all
+
+  vars:
+    remote_iso_url: https://rh-edge-tarballs-prod.s3.us-east-1.amazonaws.com/5910538/isos/kemos-pretty-edge-server.iso
+
+    vm_name: my-pretty-edge-server
+    vm_memory: "8GB"
+    vm_cpus: 4
+    vm_disk_size: "20GB"
+    vm_network_switch: VMNetwork
+
+  tasks:
+
+    - name: Destroy a VM if it exists
+      include_role:
+        name: rhel-edge-on-hyperv
+      vars:
+        vm_state: absent
+
+    - name: Create a VM
+      include_role:
+        name: rhel-edge-on-hyperv
+      vars:
+        vm_state: started
