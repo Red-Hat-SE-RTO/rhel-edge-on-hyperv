@@ -25,6 +25,7 @@
           url: "{{ remote_iso_url }}"
           dest: "/tmp/"
         register: r_iso_download
+        delegate_to: localhost
           
       - name: Set the local iso fact
         set_fact:
