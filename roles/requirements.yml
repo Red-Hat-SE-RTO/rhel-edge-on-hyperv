@@ -1,0 +1,9 @@
+---
+- src: https://github.com/tosin2013/quarkuscoffeeshop-majestic-monolith-ansible.git
+  version: "2021"
+
+- src: https://github.com/tosin2013/rhel-edge-mangement-role.git
+  version: main
+
+- src: https://github.com/Red-Hat-SE-RTO/rhel-edge-on-hyperv.git
+  version: main
