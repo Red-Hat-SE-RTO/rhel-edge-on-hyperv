@@ -3,7 +3,7 @@
   hosts: all
 
   vars:
-    remote_iso_url: https://rh-edge-tarballs-prod.s3.us-east-1.amazonaws.com/5910538/isos/kemos-pretty-edge-server.iso
+    #remote_iso_url: https://rh-edge-tarballs-prod.s3.us-east-1.amazonaws.com/5910538/isos/kemos-pretty-edge-server.iso
 
     vm_name: my-pretty-edge-server
     vm_memory: "8GB"
@@ -12,6 +12,23 @@
     vm_network_switch: VMNetwork
 
   tasks:
+  
+    - name: Download a remote ISO
+      when: remote_iso_url is defined
+      block:
+      #- name: Set fact for the file name of the ISO
+      #  set_fact:
+      #    fname: "{{ remote_iso_url | basename }}"
+
+      - name: Download the ISO
+        ansible.builtin.get_url:
+          url: "{{ remote_iso_url }}"
+          dest: "/tmp/"
+        register: r_iso_download
+          
+      - name: Set the local iso fact
+        set_fact:
+          iso_path_loc: "{{ r_iso_download.dest }}"
 
     - name: Destroy a VM if it exists
       include_role:
